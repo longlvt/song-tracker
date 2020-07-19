@@ -5,7 +5,7 @@ module.exports = {
         const schema = {
             email: Joi.string().email(),
             password: Joi.string().regex(
-                new RegExp('^[a-zA-Z0-9]{8-32}$') // a to z, A to Z, 0 to 9, length = 8-32
+                new RegExp('^[a-zA-Z0-9]{8,32}$') // a to z, A to Z, 0 to 9, length = 8-32
             )
         }
 
@@ -13,11 +13,13 @@ module.exports = {
         if (error) {
             switch (error.details[0].context.key) {
                 case 'email':
+                    console.log(`WRONG EMAIL`)
                     res.status(400).send({
                         error:'You must provide a valid email address'
                     })
                     break
                 case 'password':
+                    console.log(`WRONG PWD`)
                     res.status(400).send({
                         error:`The provided password failed to match the requirements:
                             <br>
