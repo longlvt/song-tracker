@@ -55,11 +55,15 @@
                     v-model="song.tab">
                 </v-textarea>
             </panel>
+
+            <div class="danger-alert" v-if="error">
+              {{error}}
+            </div>
             <v-btn
             class="cyan"
             @click="create">
             Create Song
-        </v-btn>
+            </v-btn>
         </v-flex>
     </v-layout>
 </template>
@@ -80,6 +84,7 @@ export default {
         lyrics: null,
         tab: null
       },
+      error: null,
       required: (value) => !!value || 'Required.'
     }
   },
@@ -88,6 +93,14 @@ export default {
   },
   methods: {
     async create () {
+      this.error = null
+      const areAllFieldsFilledIn = Object
+        .keys(this.song)
+        .every(key => !!this.song[key])
+      if (!areAllFieldsFilledIn) {
+        this.error = 'Please fill in all required fields.'
+        return
+      }
       try {
         await SongsService.post(this.song)
         this.$router.push({

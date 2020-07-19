@@ -26,17 +26,11 @@ export default {
   margin-top: 60px;
 }
 
-.v-text-field__slot.v-label.theme--light {
-  left: auto;
-  right: auto;
-  position: absolute;
-}
-
 .v-toolbar__title {
   color: white;
 }
 
-/* .v-btn__content {
-  color: white;
-} */
+.danger-alert {
+  color: red;
+}
 </style>
