@@ -63,8 +63,8 @@ export default {
       this.$router.push(route) // Use 'router' object
     },
     logout () {
-      this.$store.dispatch('setToken', null)
-      this.$store.dispatch('setUser', null)
+      this.$store.dispatch('setToken', null) // Call 'setToken' mutation in store
+      this.$store.dispatch('setUser', null) // Call 'setUser' mutation in store
 
       // Redirect to homepage
       this.$router.push({
