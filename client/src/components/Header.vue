@@ -12,11 +12,13 @@
                 Track-Tracker
             </span>
             </v-toolbar-title>
-        <!-- <v-toolbar-items>
-            <v-btn prominent>
+        <v-toolbar-items>
+            <v-btn
+                flat
+                @click="navigateTo({name: 'songs'})">
                 Browse
             </v-btn>
-        </v-toolbar-items> -->
+        </v-toolbar-items>
         <v-spacer></v-spacer>
         <v-toolbar-items>
             <v-btn
@@ -25,13 +27,17 @@
                 @click="navigateTo({name: 'login'})">
                 LogIn
             </v-btn>
-        </v-toolbar-items>
-        <v-toolbar-items>
             <v-btn
                 v-if="!$store.state.isUserLoggedIn"
                 flat
                 @click="navigateTo({name: 'register'})">
                 Sign Up
+            </v-btn>
+            <v-btn
+                v-if="$store.state.isUserLoggedIn"
+                flat
+                @click="logout">
+                Log Out
             </v-btn>
         </v-toolbar-items>
 
@@ -55,6 +61,15 @@ export default {
   methods: {
     navigateTo (route) {
       this.$router.push(route) // Use 'router' object
+    },
+    logout () {
+      this.$store.dispatch('setToken', null)
+      this.$store.dispatch('setUser', null)
+
+      // Redirect to homepage
+      this.$router.push({
+        name: 'root'
+      })
     }
   }
 }
