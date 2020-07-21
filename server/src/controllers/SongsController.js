@@ -16,6 +16,18 @@ module.exports = {
         })
     }
   },
+  async show (req, res) {
+    try {
+        const song = await Song.findByPk(req.params.songId)
+        res.send(song)
+    }
+    catch (err) {
+        console.log(`ERROR INDEX SONGS:`, err)
+        res.status(500).send({
+            error: 'An Error Has Occured. Please try again later.'
+        })
+    }
+  },
   async post (req, res) {
     try {
         const songs = await Song.create(req.body)

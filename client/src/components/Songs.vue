@@ -66,8 +66,8 @@ export default {
       songs: []
     }
   },
-  async mounted () {
-    this.songs = (await SongsService.index()).data
+  async mounted () { // Use 'mounted' when we want to get something from back-end
+    this.songs = (await SongsService.index()).data // Get all songs.
   },
   methods: {
     navigateTo (route) {
