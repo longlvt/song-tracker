@@ -34,7 +34,7 @@
                   <v-btn
                   class="cyan"
                   @click="navigateTo({
-                    name: 'song',
+                    name: 'song', // this name must be equal to one of the property's name in router/index.js
                     params: {
                       songId: song.id
                       }

@@ -1,0 +1,134 @@
+<template>
+    <v-layout>
+        <v-flex xs7>
+            <panel title="Song Detail">
+                <v-text-field
+                    label="Title"
+                    required
+                    :rules="[required]"
+                    v-model="song.title">
+                </v-text-field>
+                <v-text-field
+                    label="Artist"
+                    required
+                    :rules="[required]"
+                    v-model="song.artist">
+                </v-text-field>
+                <v-text-field
+                    label="Genre"
+                    required
+                    :rules="[required]"
+                    v-model="song.genre">
+                </v-text-field>
+                <v-text-field
+                    label="Album Name"
+                    required
+                    :rules="[required]"
+                    v-model="song.album">
+                </v-text-field>
+                <v-text-field
+                    label="Album Image URL"
+                    required
+                    :rules="[required]"
+                    v-model="song.albumImage">
+                </v-text-field>
+                <v-text-field
+                    label="Youtube ID"
+                    required
+                    :rules="[required]"
+                    v-model="song.youtubeId">
+                </v-text-field>
+            </panel>
+        </v-flex>
+        <v-flex xs8>
+            <panel title="Song Structure" class="ml-2">
+                <v-textarea
+                    label="Lyrics"
+                    required
+                    :rules="[required]"
+                    v-model="song.lyrics">
+                </v-textarea>
+                <v-textarea
+                    label="Tab"
+                    required
+                    :rules="[required]"
+                    v-model="song.tab">
+                </v-textarea>
+            </panel>
+
+            <div class="danger-alert" v-if="error">
+              {{error}}
+            </div>
+            <v-btn
+            class="cyan"
+            @click="save">
+            Save Song
+            </v-btn>
+        </v-flex>
+    </v-layout>
+</template>
+
+<script>
+import Panel from '@/components/Panel'
+import SongsService from '@/services/SongsService'
+export default {
+  data () {
+    return {
+      song: {
+        title: null,
+        artist: null,
+        genre: null,
+        album: null,
+        albumImage: null,
+        youtubeId: null,
+        lyrics: null,
+        tab: null
+      },
+      error: null,
+      required: (value) => !!value || 'Required.'
+    }
+  },
+  components: {
+    Panel
+  },
+  methods: {
+    async save () {
+      this.error = null
+      const areAllFieldsFilledIn = Object
+        .keys(this.song)
+        .every(key => !!this.song[key])
+      if (!areAllFieldsFilledIn) {
+        this.error = 'Please fill in all required fields.'
+      }
+      const songId = this.$store.state.route.params.songId
+      try {
+        await SongsService.put(this.song)
+        this.$router.push({
+          name: 'songs',
+          params: {
+            songId: songId
+          }
+        })
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  },
+  async mounted () {
+    try {
+      const songId = this.$store.state.route.params.songId
+      // this value is return inside the vuex's state due to library 'vuex-router-sync'
+
+      this.song = (await SongsService.show(songId)).data
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+</script>
+<style scoped>
+.ml-2 {
+    padding-left: 5px;
+}
+
+</style>

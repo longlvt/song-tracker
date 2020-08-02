@@ -11,6 +11,16 @@
             <div class="song-genre">
                 {{song.genre}}
             </div>
+            <v-btn
+            class="cyan"
+            @click="navigateTo({
+              name: 'song-edit', // this name must be equal to one of the property's name in router/index.js
+              params: {
+                songId: song.id
+                }
+              })"> <!-- Redirect to song/:songId page -->
+            Edit
+            </v-btn>
             </v-flex>
 
             <v-flex xs6>
@@ -28,6 +38,11 @@ export default {
   props: [
     'song'
   ],
+  methods: {
+    navigateTo (route) {
+      this.$router.push(route) // Use 'router' object
+    }
+  },
   components: {
     Panel
   }
