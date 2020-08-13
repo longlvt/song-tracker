@@ -13,12 +13,14 @@
             </div>
             <v-btn
             class="cyan"
-            @click="navigateTo({
+            :to="{
               name: 'song-edit', // this name must be equal to one of the property's name in router/index.js
-              params: {
-                songId: song.id
+              params () { // params as a method so that the songId can be dynamicaly updated.
+                return {
+                  songId: song.id
                 }
-              })"> <!-- Redirect to song/:songId page -->
+              }
+            }"> <!-- Redirect to song/:songId page -->
             Edit
             </v-btn>
             </v-flex>
@@ -33,19 +35,10 @@
 </template>
 
 <script>
-import Panel from '@/components/panel'
 export default {
   props: [
     'song'
-  ],
-  methods: {
-    navigateTo (route) {
-      this.$router.push(route) // Use 'router' object
-    }
-  },
-  components: {
-    Panel
-  }
+  ]
 }
 </script>
 <style scoped>

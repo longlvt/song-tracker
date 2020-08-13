@@ -8,14 +8,10 @@
 </template>
 
 <script>
-import Panel from '@/components/panel'
 export default {
   props: [
     'song'
-  ],
-  components: {
-    Panel
-  }
+  ]
 }
 </script>
 <style scoped>
