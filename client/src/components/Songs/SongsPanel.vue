@@ -36,7 +36,7 @@
                 params: {
                 songId: song.id
                 }
-                }"> <!-- Redirect to song/:songId page -->
+              }"> <!-- Redirect to song/:songId page -->
             View
             </v-btn>
             </v-flex>

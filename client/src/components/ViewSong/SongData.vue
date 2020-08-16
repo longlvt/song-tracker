@@ -25,17 +25,17 @@
             </v-btn>
 
             <v-btn
-            v-if="isUserLoggedIn && !isBookmarked"
+            v-if="isUserLoggedIn && !bookmark"
             class="cyan"
-            @click="bookmark">
-            Bookmark
+            @click="setAsBookmark">
+            Set As Bookmark
             </v-btn>
 
             <v-btn
-            v-if="isUserLoggedIn && isBookmarked"
+            v-if="isUserLoggedIn && bookmark"
             class="cyan"
-            @click="unbookmark">
-            Un Bookmark
+            @click="unSetAsBookmark">
+            Unset Bookmark
             </v-btn>
             </v-flex>
 
@@ -57,7 +57,7 @@ export default {
   ],
   data () {
     return {
-      isBookmarked: false
+      bookmark: null
     }
   },
   computed: {
@@ -65,47 +65,47 @@ export default {
       'isUserLoggedIn' // Grab isUserLoggedIn from store and put it under computed method
     ])
   },
-  async mounted () {
+  watch: {
+    async song () {
     // Get bookmark status for particular User and Song.
-    if (!this.isUserLoggedIn) {
-      return
-    }
-    try {
-      const bookmark = (await BookmarksService.index({
-        songId: this.song.id,
-        userId: this.$store.state.user.id
-      })).data
-      this.isBookmarked = !!bookmark
-      console.log('BOOKMARK:', this.isBookmarked)
-    } catch (err) {
-      console.log(err)
+      if (!this.isUserLoggedIn) {
+        return
+      }
+      try {
+        this.bookmark = (await BookmarksService.index({
+          songId: this.song.id,
+          userId: this.$store.state.user.id
+        })).data // When the DB association is completed, the bookmark creation will create an id for a bookmarked.
+        console.log('BOOKMARK:', this.bookmark)
+      } catch (err) {
+        console.log(err)
+      }
     }
   },
+  async mounted () {
+  },
   methods: {
-    async bookmark () {
+    async setAsBookmark () {
       try {
         console.log(`SONG ID to Bookmark:`, this.song.id)
         console.log(`USER ID to Bookmark:`, this.$store.state.user.id)
-        await BookmarksService.post({
+        this.bookmark = (await BookmarksService.post({
           songId: this.song.id,
           userId: this.$store.state.user.id
-        })
+        })).data
         // FIX ME: Need to delete this hard-code after finish DB association
-        this.isBookmarked = true
+        this.bookmark = true
       } catch (err) {
         console.log(err)
       }
     },
-    async unbookmark () {
+    async unSetAsBookmark () {
       try {
         console.log(`SONG ID to UnBookmark:`, this.song.id)
         console.log(`USER ID to UnBookmark:`, this.$store.state.user.id)
-        await BookmarksService.delete({
-          songId: this.song.id,
-          userId: this.$store.state.user.id
-        })
-        // FIX ME: Need to delete this hard-code after finish DB association
-        this.isBookmarked = false
+        // FIX ME: When the DB association is completed, the bookmark creation will create an id for a bookmarked.
+        await BookmarksService.delete(this.bookmark.id)
+        this.bookmark = null
       } catch (err) {
         console.log(err)
       }
