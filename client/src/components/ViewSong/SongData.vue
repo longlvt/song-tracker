@@ -27,14 +27,14 @@
             <v-btn
             v-if="isUserLoggedIn && !isBookmarked"
             class="cyan"
-            @click="unbookmark">
+            @click="bookmark">
             Bookmark
             </v-btn>
 
             <v-btn
             v-if="isUserLoggedIn && isBookmarked"
             class="cyan"
-            @click="bookmark">
+            @click="unbookmark">
             Un Bookmark
             </v-btn>
             </v-flex>
@@ -66,6 +66,10 @@ export default {
     ])
   },
   async mounted () {
+    // Get bookmark status for particular User and Song.
+    if (!this.isUserLoggedIn) {
+      return
+    }
     try {
       const bookmark = (await BookmarksService.index({
         songId: this.song.id,
@@ -79,9 +83,6 @@ export default {
   },
   methods: {
     async bookmark () {
-      if (!this.isUserLoggedIn) {
-        return
-      }
       try {
         console.log(`SONG ID to Bookmark:`, this.song.id)
         console.log(`USER ID to Bookmark:`, this.$store.state.user.id)
@@ -89,14 +90,13 @@ export default {
           songId: this.song.id,
           userId: this.$store.state.user.id
         })
+        // FIX ME: Need to delete this hard-code after finish DB association
+        this.isBookmarked = true
       } catch (err) {
         console.log(err)
       }
     },
     async unbookmark () {
-      if (!this.isUserLoggedIn) {
-        return
-      }
       try {
         console.log(`SONG ID to UnBookmark:`, this.song.id)
         console.log(`USER ID to UnBookmark:`, this.$store.state.user.id)
@@ -104,6 +104,8 @@ export default {
           songId: this.song.id,
           userId: this.$store.state.user.id
         })
+        // FIX ME: Need to delete this hard-code after finish DB association
+        this.isBookmarked = false
       } catch (err) {
         console.log(err)
       }
