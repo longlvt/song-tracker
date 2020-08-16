@@ -1,20 +1,35 @@
 const Sequelize = require('sequelize')
 // const Bookmark = require('../models/Bookmark')
+const Song = require('../models/Song')
+const User = require('../models/User')
+const _ = require('lodash')
 
 
 module.exports = {
   async index (req, res) {
     try {
-        const {songId} = req.query
+        const {songId, userId} = req.query
+        const findWhere = {
+            UserId: userId
+        }
+        if (songId) findWhere.SongId = songId
         // FIX ME: FIX fetching bookmark after finish associate DB
-        // const bookmark = await Bookmark.findOne({
-        //   where: {
-        //     SongId: songId,
-        //     UserId: userId
-        //   }
+        // const bookmarks = await Bookmark.All({
+        //   where: findWhere,
+        //     include: [ // To include the data of Song into the response 
+        //         {
+        //             model: Song
+        //         }
+        //     ]
         // })
-        // res.send(bookmark)
-        res.send(songId)
+        // .map(bookmark => bookmark.toJSON())
+        // .map(bookmark => _.extend(
+        //     {}, // Create a new object then append data of Song and bookmark into it.
+        //     bookmark.Song,
+        //     bookmark
+        // ))
+        // res.send(bookmarks)
+        res.send(findWhere)
     }
     catch (err) {
         res.status(500).send({

@@ -62,7 +62,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'isUserLoggedIn' // Grab isUserLoggedIn from store and put it under computed method
+      'isUserLoggedIn', // Grab isUserLoggedIn from store and put it under computed method
+      'user'
     ])
   },
   watch: {
@@ -72,10 +73,11 @@ export default {
         return
       }
       try {
-        this.bookmark = (await BookmarksService.index({
+        const bookmarks = (await BookmarksService.index({
           songId: this.song.id,
-          userId: this.$store.state.user.id
+          userId: this.user.id
         })).data // When the DB association is completed, the bookmark creation will create an id for a bookmarked.
+        if (bookmarks.length) this.bookmark = bookmarks[0]
         console.log('BOOKMARK:', this.bookmark)
       } catch (err) {
         console.log(err)

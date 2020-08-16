@@ -1,16 +1,15 @@
 <template>
     <panel title="Bookmark">
+      FIX ME: THIS IS SUPPOSED TO SHOW BOOKMARK LIST
         <v-data-table
             :headers="headers"
-            :pagination.sync="pagination"
             :items="bookmarks">
-            <!-- FIX ME: Using slot-scope -->
-            <template slot-scope="items">
+            <template slot="items" slot-scope="props">
                 <td class="text-xs-right">
-                    {{props.item.title}}
+                    {{ props.item.title }}
                 </td>
                 <td class="text-xs-right">
-                    {{props.item.artist}}
+                    {{ props.item.artist }}
                 </td>
             </template>
         </v-data-table>
@@ -18,6 +17,8 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import BookmarksService from '@/services/BookmarksService'
 export default {
   data () {
     return {
@@ -35,21 +36,21 @@ export default {
         sortBy: 'date', // Sort by the last time it was bookmarked
         descending: true
       },
-      bookmarks: [
-        {
-          title: 'My Bookmarks',
-          artist: 'Test Bookmarks'
-        },
-        {
-          title: 'My Bookmarks 2',
-          artist: 'Test Bookmarks 2'
-        }
-
-      ]
+      bookmarks: []
     }
   },
+  computed: {
+    ...mapState([
+      'isUserLoggedIn', // Grab isUserLoggedIn from store and put it under computed method
+      'user'
+    ])
+  },
   async mounted () {
-
+    if (this.isUserLoggedIn) {
+      this.bookmarks = (await BookmarksService.index({
+        userId: this.user.id
+      })).data
+    }
   }
 }
 </script>
