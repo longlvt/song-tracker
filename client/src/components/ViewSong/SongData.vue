@@ -23,6 +23,20 @@
             }"> <!-- Redirect to song/:songId page -->
             Edit
             </v-btn>
+
+            <v-btn
+            v-if="isUserLoggedIn && !isBookmarked"
+            class="cyan"
+            @click="unbookmark">
+            Bookmark
+            </v-btn>
+
+            <v-btn
+            v-if="isUserLoggedIn && isBookmarked"
+            class="cyan"
+            @click="bookmark">
+            Un Bookmark
+            </v-btn>
             </v-flex>
 
             <v-flex xs6>
@@ -35,10 +49,66 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import BookmarksService from '@/services/BookmarksService'
 export default {
   props: [
     'song'
-  ]
+  ],
+  data () {
+    return {
+      isBookmarked: false
+    }
+  },
+  computed: {
+    ...mapState([
+      'isUserLoggedIn' // Grab isUserLoggedIn from store and put it under computed method
+    ])
+  },
+  async mounted () {
+    try {
+      const bookmark = (await BookmarksService.index({
+        songId: this.song.id,
+        userId: this.$store.state.user.id
+      })).data
+      this.isBookmarked = !!bookmark
+      console.log('BOOKMARK:', this.isBookmarked)
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  methods: {
+    async bookmark () {
+      if (!this.isUserLoggedIn) {
+        return
+      }
+      try {
+        console.log(`SONG ID to Bookmark:`, this.song.id)
+        console.log(`USER ID to Bookmark:`, this.$store.state.user.id)
+        await BookmarksService.post({
+          songId: this.song.id,
+          userId: this.$store.state.user.id
+        })
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async unbookmark () {
+      if (!this.isUserLoggedIn) {
+        return
+      }
+      try {
+        console.log(`SONG ID to UnBookmark:`, this.song.id)
+        console.log(`USER ID to UnBookmark:`, this.$store.state.user.id)
+        await BookmarksService.delete({
+          songId: this.song.id,
+          userId: this.$store.state.user.id
+        })
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
 }
 </script>
 <style scoped>

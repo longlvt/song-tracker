@@ -4,6 +4,8 @@ const cors = require('cors')
 const morgan = require('morgan')
 const sequelize = require('./models')
 const config = require('./config/config')
+// const Song = require('./models/Song')
+// const User = require('./models/User')
 
 const app = express()
 
@@ -13,6 +15,7 @@ app.use(cors())
 
 require('./routes')(app)
 
+// Song.belongsTo(User)
 sequelize.sync()
     .then(() => {
         app.listen(config.port)

@@ -1,4 +1,4 @@
-const Song = require('../models/Songs')
+const Song = require('../models/Song')
 const Sequelize = require('sequelize')
 
 

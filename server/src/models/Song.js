@@ -10,7 +10,7 @@ const Song = sequelize.define('Song', {
     albumImage: Sequelize.STRING,
     youtubeId: Sequelize.STRING,
     lyrics: Sequelize.TEXT,
-    tab: Sequelize.TEXT
+    tab: Sequelize.TEXT,
     })
 
 
