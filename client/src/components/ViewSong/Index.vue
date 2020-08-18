@@ -27,21 +27,41 @@
 </template>
 <script>
 import SongsService from '@/services/SongsService'
+import SongHistoryServie from '@/services/SongHistoryService'
 import SongData from '@/components/ViewSong/SongData'
 import YoutubeView from '@/components/ViewSong/YoutubeView'
 import Lyrics from '@/components/ViewSong/Lyrics'
 import Tab from '@/components/ViewSong/Tab'
+import {mapState} from 'vuex'
+
 export default {
   data () {
     return {
       song: {}
     }
   },
+  computed: {
+    ...mapState([
+      'isUserLoggedIn', // Grab isUserLoggedIn from store and put it under computed method
+      'user',
+      'route'
+    ])
+  },
   async mounted () {
     const songId = this.$store.state.route.params.songId
     // this value is return inside the vuex's state due to library 'vuex-router-sync'
 
     this.song = (await SongsService.show(songId)).data
+    console.log(`SONG DETAIL:`, this.song)
+
+    // Save the view to Back-end (only if user is logged-in)
+    if (this.isUserLoggedIn) {
+      console.log(`SAVE VIEW HISTORY FOR USER: ${this.user.id}, and SONG: ${songId}`)
+      SongHistoryServie.post({
+        songId: songId,
+        userId: this.user.id
+      })
+    }
   },
   components: {
     SongData,

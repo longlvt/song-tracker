@@ -14,15 +14,15 @@ module.exports = {
         }
         if (songId) findWhere.SongId = songId
         // FIX ME: FIX fetching bookmark after finish associate DB
-        // const bookmarks = await Bookmark.All({
-        //   where: findWhere,
+        // const bookmarks = await Bookmark.findAll({
+        //   where: findWhere, // find element that match findWhere
         //     include: [ // To include the data of Song into the response 
         //         {
         //             model: Song
         //         }
         //     ]
         // })
-        // .map(bookmark => bookmark.toJSON())
+        // .map(bookmark => bookmark.toJSON()) // convert element to JSON
         // .map(bookmark => _.extend(
         //     {}, // Create a new object then append data of Song and bookmark into it.
         //     bookmark.Song,
@@ -39,8 +39,8 @@ module.exports = {
   },
   async post (req, res) {
     try {
-        console.log(req.body)
-        const { songId, userId } = req.body.params
+        console.log(`BODY IN POST BOOKMARK:`, req.body)
+        const { songId, userId } = req.body
         // FIX ME: FIX creating bookmark after finish associate DB
         // const bookmark = await Bookmark.findOne({
         //   where: {
