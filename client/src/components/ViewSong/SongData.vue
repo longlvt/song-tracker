@@ -74,8 +74,8 @@ export default {
       }
       try {
         const bookmarks = (await BookmarksService.index({
-          songId: this.song.id,
-          userId: this.user.id
+          songId: this.song.id
+          // userId: this.user.id // userId will be extracted from the JWT token on the back-end
         })).data // When the DB association is completed, the bookmark creation will create an id for a bookmarked.
         if (bookmarks.length) this.bookmark = bookmarks[0]
         console.log('BOOKMARK:', this.bookmark)
@@ -92,8 +92,8 @@ export default {
         console.log(`SONG ID to Bookmark:`, this.song.id)
         console.log(`USER ID to Bookmark:`, this.$store.state.user.id)
         this.bookmark = (await BookmarksService.post({
-          songId: this.song.id,
-          userId: this.$store.state.user.id
+          songId: this.song.id
+          // userId: this.$store.state.user.id // userId will be extracted from the JWT token on the back-end
         })).data
         // FIX ME: Need to delete this hard-code after finish DB association
         this.bookmark = true

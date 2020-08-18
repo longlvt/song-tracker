@@ -1,3 +1,4 @@
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -6,6 +7,7 @@ const sequelize = require('./models')
 const config = require('./config/config')
 // const Song = require('./models/Song')
 // const User = require('./models/User')
+require ('./passport')
 
 const app = express()
 

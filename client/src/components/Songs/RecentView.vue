@@ -48,9 +48,7 @@ export default {
   async mounted () {
     if (this.isUserLoggedIn) {
       console.log(`RETRIEVING RECENT VIEW FOR USERID:`, this.user.id)
-      this.histories = (await SongHistoryService.index({
-        userId: this.user.id
-      })).data
+      this.histories = (await SongHistoryService.index()).data
     }
   }
 }

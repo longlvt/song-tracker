@@ -6,7 +6,6 @@
   "scripts": {
     "start": "nodemon src/app.js 'node run lint && node'",
     "lint": "eslint \"**/*.js\""
-    // "seed": "node ./seed"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +21,8 @@
     "morgan": "^1.10.0",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.4",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
     "sequelize": "^6.3.0",
     "sqlite3": "^5.0.0"
   },

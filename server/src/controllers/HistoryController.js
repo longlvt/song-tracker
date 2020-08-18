@@ -8,13 +8,13 @@ const _ = require('lodash')
 module.exports = {
   async index (req, res) {
     try {
-        const {userId} = req.query
+        const {userId} = req.user.id // req.user comes from isAuthenticated if user is already logged-in
         console.log(`RETRIEVING HISTORY OF USER:`, userId)
         const findWhere = {
             UserId: userId
         }
         // FIX ME: Fetch history after finish associate DB
-        // const history = await History.findAll({
+        // const histories = await History.findAll({
         //   where: {
         //       UserId: userId
         //   }, // find element that match findWhere
@@ -30,7 +30,7 @@ module.exports = {
         //     history.Song,
         //     history
         // ))
-        // res.send(history)
+        // res.send(_.uniqBy(histories, history => history.SongId)) // Return a unique collection where key is history.SongId
         res.send(findWhere)
     }
     catch (err) {
@@ -42,7 +42,8 @@ module.exports = {
   async post (req, res) {
     try {
         console.log(`BODY IN POST HISTORY:`, req.body)
-        const { songId, userId } = req.body
+        const userId = req.user.id // req.user comes from isAuthenticated if user is already logged-in
+        const { songId } = req.body
         // FIX ME: FIX creating bookmark after finish associate DB
         // const newHistory = await History.create({
         //   SongId: songId,

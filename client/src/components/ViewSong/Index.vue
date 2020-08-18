@@ -58,8 +58,7 @@ export default {
     if (this.isUserLoggedIn) {
       console.log(`SAVE VIEW HISTORY FOR USER: ${this.user.id}, and SONG: ${songId}`)
       SongHistoryServie.post({
-        songId: songId,
-        userId: this.user.id
+        songId: songId
       })
     }
   },

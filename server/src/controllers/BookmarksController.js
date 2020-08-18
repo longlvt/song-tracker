@@ -8,7 +8,8 @@ const _ = require('lodash')
 module.exports = {
   async index (req, res) {
     try {
-        const {songId, userId} = req.query
+        const userId = req.user.id // req.user comes from isAuthenticated if user is already logged-in
+        const {songId} = req.query
         const findWhere = {
             UserId: userId
         }
@@ -40,7 +41,8 @@ module.exports = {
   async post (req, res) {
     try {
         console.log(`BODY IN POST BOOKMARK:`, req.body)
-        const { songId, userId } = req.body
+        const userId = req.user.id // req.user comes from isAuthenticated if user is already logged-in
+        const { songId } = req.body
         // FIX ME: FIX creating bookmark after finish associate DB
         // const bookmark = await Bookmark.findOne({
         //   where: {
@@ -70,9 +72,18 @@ module.exports = {
   async delete (req, res) {
     try {
         console.log(req.params)
+        const userId = req.user.id // req.user comes from isAuthenticated if user is already logged-in
         const { bookmarkId } = req.params
         // FIX ME: FIX deleting bookmark after finish associate DB
-        // const bookmark = await Bookmark.findByPk(bookmarkId)
+        // const bookmark = await Bookmark.findOne({
+        //     where: {
+        //         id: bookmarkId,
+        //         UserId: userId
+        //     }
+        // })
+        // if (!bookmark) res.status(403).send({
+        //     error: 'You do not have permission to delete this bookmark'
+        // })
         // await bookmark.destroy()
         // res.send(bookmark)
         console.log(`BOOKMARK TO DELETE: ${bookmarkId}`)
