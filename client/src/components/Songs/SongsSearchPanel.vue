@@ -25,8 +25,8 @@ export default {
         route.query = {
           search: this.search
         }
-      } // At this point, the value in the search box will be appended in the URL, under search query.
-      // However, when you refresh the page, the search query in the URL still there,
+      } // At this point, the value in the search box will be appended in the URL, under 'search' query.
+      // However, when you refresh the page, the 'search' query in the URL still there,
       // but the search box is empty.
       this.$router.push(route)
     }, 700), // Debounce 700ms to do the request to server
